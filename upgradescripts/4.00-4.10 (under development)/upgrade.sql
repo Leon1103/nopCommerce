@@ -17,6 +17,9 @@ set @resources='
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportAllowDownloadImages.Hint">
     <Value>Check if images can be downloaded from remote server when exporting products</Value>
   </LocaleResource>  
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ShowProductReviewsPerStore.Hint">
+    <Value>Check to display reviews written in the current store only (on a product details page and on the account product reviews page).</Value>
+  </LocaleResource>
 </Language>
 '
 
