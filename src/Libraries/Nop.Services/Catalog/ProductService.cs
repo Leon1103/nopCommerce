@@ -1971,7 +1971,7 @@ namespace Nop.Services.Catalog
                 query = query.Where(pr => pr.Product.VendorId == vendorId);
 
             //ignore deleted products
-            query = query.Where(pr => pr.Product != null && !pr.Product.Deleted);
+            query = query.Where(pr => !pr.Product.Deleted);
 
             //filter by limited to store products
             if (storeId > 0 && !showHidden && !_catalogSettings.IgnoreStoreLimitations)
@@ -1981,7 +1981,7 @@ namespace Nop.Services.Catalog
                             on new { Id = productReview.ProductId, Name = nameof(Product) } 
                             equals new { Id = storeMapping.EntityId, Name = storeMapping.EntityName } into storeMappingsWithNulls
                         from storeMapping in storeMappingsWithNulls.DefaultIfEmpty()
-                        where productReview.Product != null && !productReview.Product.LimitedToStores || storeMapping.StoreId == storeId
+                        where !productReview.Product.LimitedToStores || storeMapping.StoreId == storeId
                         select productReview;
             }
 
