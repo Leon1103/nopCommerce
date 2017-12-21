@@ -35,10 +35,11 @@ namespace Nop.Services.Orders
         /// <param name="createdToUtc">Created date to (UTC); null to load all records</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
+        /// <param name="getOnlyTotalCount">Get only total count. Set to "True" if you don't want to load a data from database</param>
         /// <returns>Return requests</returns>
         IPagedList<ReturnRequest> SearchReturnRequests(int storeId = 0, int customerId = 0,
             int orderItemId = 0, string customNumber = "", ReturnRequestStatus? rs = null, DateTime? createdFromUtc = null,
-            DateTime? createdToUtc = null, int pageIndex = 0, int pageSize = int.MaxValue);
+            DateTime? createdToUtc = null, int pageIndex = 0, int pageSize = int.MaxValue, bool getOnlyTotalCount = false);
 
         /// <summary>
         /// Delete a return request action
