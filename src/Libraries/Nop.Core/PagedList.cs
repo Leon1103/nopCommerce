@@ -17,7 +17,7 @@ namespace Nop.Core
         /// <param name="source">source</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <param name="getOnlyTotalCount">Get only total count. Set to "True" if you don't want to load a data from database</param>
+        /// <param name="getOnlyTotalCount">A value in indicating whether you want to load only total number of records. Set to "true" if you don't want to load data from database</param>
         public PagedList(IQueryable<T> source, int pageIndex, int pageSize, bool getOnlyTotalCount = false)
         {
             var total = source.Count();

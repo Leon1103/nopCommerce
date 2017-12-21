@@ -301,7 +301,7 @@ namespace Nop.Services.Customers
         /// <param name="sct">Value indicating what shopping cart type to filter; userd when 'loadOnlyWithShoppingCart' param is 'true'</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <param name="getOnlyTotalCount">Get only total count. Set to "True" if you don't want to load a data from database</param>
+        /// <param name="getOnlyTotalCount">A value in indicating whether you want to load only total number of records. Set to "true" if you don't want to load data from database</param>
         /// <returns>Customers</returns>
         public virtual IPagedList<Customer> GetAllCustomers(DateTime? createdFromUtc = null,
             DateTime? createdToUtc = null, int affiliateId = 0, int vendorId = 0,
