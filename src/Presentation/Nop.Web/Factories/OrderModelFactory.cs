@@ -17,6 +17,7 @@ using Nop.Services.Payments;
 using Nop.Services.Seo;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Tracking;
+using Nop.Services.Vendors;
 using Nop.Web.Models.Common;
 using Nop.Web.Models.Order;
 
@@ -53,6 +54,7 @@ namespace Nop.Web.Factories
         private readonly AddressSettings _addressSettings;
         private readonly RewardPointsSettings _rewardPointsSettings;
         private readonly PdfSettings _pdfSettings;
+        private readonly IVendorService _vendorService;
 
         #endregion
 
@@ -80,7 +82,8 @@ namespace Nop.Web.Factories
             ShippingSettings shippingSettings, 
             AddressSettings addressSettings,
             RewardPointsSettings rewardPointsSettings,
-            PdfSettings pdfSettings)
+            PdfSettings pdfSettings,
+            IVendorService vendorService)
         {
             this._addressModelFactory = addressModelFactory;
             this._orderService = orderService;
@@ -106,6 +109,7 @@ namespace Nop.Web.Factories
             this._addressSettings = addressSettings;
             this._rewardPointsSettings = rewardPointsSettings;
             this._pdfSettings = pdfSettings;
+            this._vendorService = vendorService;
         }
 
         #endregion
@@ -379,7 +383,13 @@ namespace Nop.Web.Factories
 
             //purchased products
             model.ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage;
+            model.ShowVendorName = _catalogSettings.ShowVendorNameOnProductDetailsPage;
+
             var orderItems = order.OrderItems;
+
+            var vendors = _vendorService.GetAllVendors(vendorIds: orderItems.Select(oi => oi.Product.VendorId)
+                .Where(id => id > 0).ToArray());
+
             foreach (var orderItem in orderItems)
             {
                 var orderItemModel = new OrderDetailsModel.OrderItemModel
@@ -387,6 +397,7 @@ namespace Nop.Web.Factories
                     Id = orderItem.Id,
                     OrderItemGuid = orderItem.OrderItemGuid,
                     Sku = orderItem.Product.FormatSku(orderItem.AttributesXml, _productAttributeParser),
+                    VendorName = vendors.FirstOrDefault(v => v.Id == orderItem.Product.VendorId)?.Name ?? string.Empty,
                     ProductId = orderItem.Product.Id,
                     ProductName = orderItem.Product.GetLocalized(x => x.Name),
                     ProductSeName = orderItem.Product.GetSeName(),
@@ -573,3 +584,4 @@ namespace Nop.Web.Factories
         #endregion
     }
 }
+

@@ -25,6 +25,7 @@ using Nop.Services.Media;
 using Nop.Services.Orders;
 using Nop.Services.Payments;
 using Nop.Services.Stores;
+using Nop.Services.Vendors;
 
 namespace Nop.Services.Common
 {
@@ -57,6 +58,7 @@ namespace Nop.Services.Common
         private readonly PdfSettings _pdfSettings;
         private readonly TaxSettings _taxSettings;
         private readonly AddressSettings _addressSettings;
+        private readonly IVendorService _vendorService;
 
         #endregion
 
@@ -87,6 +89,7 @@ namespace Nop.Services.Common
         /// <param name="pdfSettings">PDF sSettings</param>
         /// <param name="taxSettings">Tax settings</param>
         /// <param name="addressSettings">Address settings</param>
+        /// <param name="vendorService">Vendor service</param>
         public PdfService(ILocalizationService localizationService, 
             ILanguageService languageService,
             IWorkContext workContext,
@@ -108,7 +111,8 @@ namespace Nop.Services.Common
             MeasureSettings measureSettings,
             PdfSettings pdfSettings,
             TaxSettings taxSettings,
-            AddressSettings addressSettings)
+            AddressSettings addressSettings,
+            IVendorService vendorService)
         {
             this._localizationService = localizationService;
             this._languageService = languageService;
@@ -132,6 +136,7 @@ namespace Nop.Services.Common
             this._pdfSettings = pdfSettings;
             this._taxSettings = taxSettings;
             this._addressSettings = addressSettings;
+            this._vendorService = vendorService;
         }
 
         #endregion
@@ -714,24 +719,24 @@ namespace Nop.Services.Common
 
             var orderItems = order.OrderItems;
 
-            var productsTable = new PdfPTable(_catalogSettings.ShowSkuOnProductDetailsPage ? 5 : 4)
+            var count = 4 + (_catalogSettings.ShowSkuOnProductDetailsPage ? 1 : 0)
+                        + (_catalogSettings.ShowVendorNameOnProductDetailsPage ? 1 : 0);
+            
+
+            var productsTable = new PdfPTable(count)
             {
                 RunDirection = GetDirection(lang),
                 WidthPercentage = 100f
             };
 
-            if (lang.Rtl)
+            var widths = new Dictionary<int, int[]>
             {
-                productsTable.SetWidths(_catalogSettings.ShowSkuOnProductDetailsPage
-                    ? new[] { 15, 10, 15, 15, 45 }
-                    : new[] { 20, 10, 20, 50 });
-            }
-            else
-            {
-                productsTable.SetWidths(_catalogSettings.ShowSkuOnProductDetailsPage
-                    ? new[] { 45, 15, 15, 10, 15 }
-                    : new[] { 50, 20, 10, 20 });
-            }
+                {4, new[] {50, 20, 10, 20}},
+                {5, new[] {45, 15, 15, 10, 15}},
+                {6, new[] {40, 13, 13, 12, 10, 12}}
+            };
+
+            productsTable.SetWidths(lang.Rtl ? widths[count].Reverse().ToArray() : widths[count]);
 
             //product name
             var cellProductItem = GetPdfCell("PDFInvoice.ProductName", lang, font);
@@ -743,6 +748,15 @@ namespace Nop.Services.Common
             if (_catalogSettings.ShowSkuOnProductDetailsPage)
             {
                 cellProductItem = GetPdfCell("PDFInvoice.SKU", lang, font);
+                cellProductItem.BackgroundColor = BaseColor.LIGHT_GRAY;
+                cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+                productsTable.AddCell(cellProductItem);
+            }
+
+            //Vendor name
+            if (_catalogSettings.ShowVendorNameOnProductDetailsPage)
+            {
+                cellProductItem = GetPdfCell("PDFInvoice.VendorName", lang, font);
                 cellProductItem.BackgroundColor = BaseColor.LIGHT_GRAY;
                 cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
                 productsTable.AddCell(cellProductItem);
@@ -765,6 +779,8 @@ namespace Nop.Services.Common
             cellProductItem.BackgroundColor = BaseColor.LIGHT_GRAY;
             cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
             productsTable.AddCell(cellProductItem);
+
+            var vendors = _vendorService.GetAllVendors(vendorIds: orderItems.Select(item => item.Product.VendorId).ToArray());
 
             foreach (var orderItem in orderItems)
             {
@@ -811,6 +827,15 @@ namespace Nop.Services.Common
                 {
                     var sku = p.FormatSku(orderItem.AttributesXml, _productAttributeParser);
                     cellProductItem = GetPdfCell(sku ?? string.Empty, font);
+                    cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
+                    productsTable.AddCell(cellProductItem);
+                }
+
+                //Vendor name
+                if (_catalogSettings.ShowVendorNameOnProductDetailsPage)
+                {
+                    var vendorName = vendors.FirstOrDefault(v=>v.Id==p.VendorId)?.Name ?? string.Empty;
+                    cellProductItem = GetPdfCell(vendorName, font);
                     cellProductItem.HorizontalAlignment = Element.ALIGN_CENTER;
                     productsTable.AddCell(cellProductItem);
                 }

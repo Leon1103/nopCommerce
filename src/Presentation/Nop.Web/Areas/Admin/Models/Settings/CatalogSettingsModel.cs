@@ -249,5 +249,9 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         public bool IgnoreStoreLimitations { get; set; }
         [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.CacheProductPrices")]
         public bool CacheProductPrices { get; set; }
+
+        [NopResourceDisplayName("Admin.Configuration.Settings.Catalog.ShowVendorNameOnProductDetailsPage")]
+        public bool ShowVendorNameOnProductDetailsPage { get; set; }
+        public bool ShowVendorNameOnProductDetailsPage_OverrideForStore { get; set; }
     }
 }

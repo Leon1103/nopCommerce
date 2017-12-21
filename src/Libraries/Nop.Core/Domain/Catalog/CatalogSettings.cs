@@ -39,6 +39,11 @@ namespace Nop.Core.Domain.Catalog
         public bool ShowSkuOnProductDetailsPage { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to display vendor name of product on the product details page
+        /// </summary>
+        public bool ShowVendorNameOnProductDetailsPage { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether to display product SKU on catalog pages
         /// </summary>
         public bool ShowSkuOnCatalogPages { get; set; }

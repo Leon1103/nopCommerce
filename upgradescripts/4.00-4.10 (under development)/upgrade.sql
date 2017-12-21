@@ -17,6 +17,21 @@ set @resources='
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ExportImportAllowDownloadImages.Hint">
     <Value>Check if images can be downloaded from remote server when exporting products</Value>
   </LocaleResource>  
+  <LocaleResource Name="PDFInvoice.VendorName">
+    <Value>Vendor name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Product(s).VendorName">
+    <Value>Vendor name</Value>
+  </LocaleResource> 
+  <LocaleResource Name="ShoppingCart.VendorName">
+    <Value>Vendor name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ShowVendorNameOnProductDetailsPage">
+    <Value>Show vendor name on product details page</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ShowVendorNameOnProductDetailsPage.Hint">
+    <Value>Check to show vendor name of product on the product details page.</Value>
+  </LocaleResource>    
 </Language>
 '
 
@@ -103,5 +118,13 @@ IF NOT EXISTS (SELECT 1 FROM [Setting] WHERE [name] = N'catalogsettings.exportim
 BEGIN
 	INSERT [Setting] ([Name], [Value], [StoreId])
 	VALUES (N'catalogsettings.exportimportallowdownloadimages', N'false', 0)
+END
+GO
+
+--new setting
+IF NOT EXISTS (SELECT 1 FROM [Setting] WHERE [name] = N'catalogsettings.showvendornameonproductdetailspage')
+BEGIN
+	INSERT [Setting] ([Name], [Value], [StoreId])
+	VALUES (N'catalogsettings.showvendornameonproductdetailspage', N'false', 0)
 END
 GO

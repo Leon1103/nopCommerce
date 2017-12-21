@@ -546,6 +546,16 @@
                                 <span asp-validation-for="ShowManufacturerPartNumber"></span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-override-store-checkbox asp-for="ShowVendorNameOnProductDetailsPage_OverrideForStore" asp-input="ShowVendorNameOnProductDetailsPage" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                                <nop-label asp-for="ShowVendorNameOnProductDetailsPage" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="ShowVendorNameOnProductDetailsPage" />
+                                <span asp-validation-for="ShowVendorNameOnProductDetailsPage"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="panel panel-default advanced-setting">
