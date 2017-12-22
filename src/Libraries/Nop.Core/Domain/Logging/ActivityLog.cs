@@ -14,6 +14,11 @@ namespace Nop.Core.Domain.Logging
         public int ActivityLogTypeId { get; set; }
 
         /// <summary>
+        /// Gets or sets the entity identifier
+        /// </summary>
+        public int? EntityId { get; set; }
+
+        /// <summary>
         /// Gets or sets the customer identifier
         /// </summary>
         public int CustomerId { get; set; }

@@ -116,7 +116,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _logger.ClearLog();
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteSystemLog", _localizationService.GetResource("ActivityLog.DeleteSystemLog"));
+            _customerActivityService.InsertActivity("DeleteSystemLog", comment: _localizationService.GetResource("ActivityLog.DeleteSystemLog"));
 
             SuccessNotification(_localizationService.GetResource("Admin.System.Log.Cleared"));
             return RedirectToAction("List");
@@ -163,7 +163,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _logger.DeleteLog(log);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteSystemLog", _localizationService.GetResource("ActivityLog.DeleteSystemLog"));
+            _customerActivityService.InsertActivity("DeleteSystemLog", comment: _localizationService.GetResource("ActivityLog.DeleteSystemLog"));
 
             SuccessNotification(_localizationService.GetResource("Admin.System.Log.Deleted"));
             return RedirectToAction("List");
@@ -179,7 +179,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _logger.DeleteLogs(_logger.GetLogByIds(selectedIds.ToArray()).ToList());
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteSystemLog", _localizationService.GetResource("ActivityLog.DeleteSystemLog"));
+            _customerActivityService.InsertActivity("DeleteSystemLog", comment: _localizationService.GetResource("ActivityLog.DeleteSystemLog"));
 
             return Json(new {Result = true});
         }

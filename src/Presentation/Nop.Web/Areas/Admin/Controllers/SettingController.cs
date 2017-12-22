@@ -232,7 +232,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("Blog");
@@ -294,7 +295,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("Vendor");
@@ -383,7 +385,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("Forum");
@@ -441,7 +444,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("News");
@@ -566,7 +570,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
             
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("Shipping");
@@ -725,7 +730,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("Tax");
@@ -890,7 +896,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
 
@@ -1015,7 +1022,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _settingService.ClearCache();
 
                 //activity log
-                _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+                _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
                 SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             }
@@ -1134,7 +1142,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
 
                 //activity log
-                _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+                _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
                 SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             }
@@ -1485,7 +1494,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
             
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("ShoppingCart");
@@ -1559,7 +1569,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
             
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("Media");
@@ -1575,7 +1586,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _pictureService.StoreInDb = !_pictureService.StoreInDb;
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             return RedirectToAction("Media");
@@ -1643,7 +1655,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.SaveSetting(externalAuthenticationSettings);
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
 
@@ -2073,7 +2086,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings",
+                comment: _localizationService.GetResource("ActivityLog.EditSettings"));
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
             
@@ -2289,7 +2303,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.SetSetting(model.Name, model.Value, storeId);
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", setting.Id, 
+                _localizationService.GetResource("ActivityLog.EditSettings"));
 
             return new NullJsonResult();
         }
@@ -2310,9 +2325,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
             var storeId = model.StoreId;
             _settingService.SetSetting(model.Name, model.Value, storeId);
-
+            
             //activity log
-            _customerActivityService.InsertActivity("AddNewSetting", _localizationService.GetResource("ActivityLog.AddNewSetting"), model.Name);
+            _customerActivityService.InsertActivity("AddNewSetting", _settingService.GetSetting(model.Name, storeId)?.Id,
+                _localizationService.GetResource("ActivityLog.AddNewSetting"), model.Name);
 
             return new NullJsonResult();
         }
@@ -2326,10 +2342,12 @@ namespace Nop.Web.Areas.Admin.Controllers
             var setting = _settingService.GetSettingById(id);
             if (setting == null)
                 throw new ArgumentException("No setting found with the specified id");
+
             _settingService.DeleteSetting(setting);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteSetting", _localizationService.GetResource("ActivityLog.DeleteSetting"), setting.Name);
+            _customerActivityService.InsertActivity("DeleteSetting", setting.Id,
+                _localizationService.GetResource("ActivityLog.DeleteSetting"), setting.Name);
 
             return new NullJsonResult();
         }

@@ -130,7 +130,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 UpdateAttributeLocales(specificationAttribute, model);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewSpecAttribute", _localizationService.GetResource("ActivityLog.AddNewSpecAttribute"), specificationAttribute.Name);
+                _customerActivityService.InsertActivity("AddNewSpecAttribute", specificationAttribute.Id,
+                    _localizationService.GetResource("ActivityLog.AddNewSpecAttribute"), specificationAttribute.Name);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Added"));
 
@@ -188,7 +189,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 UpdateAttributeLocales(specificationAttribute, model);
 
                 //activity log
-                _customerActivityService.InsertActivity("EditSpecAttribute", _localizationService.GetResource("ActivityLog.EditSpecAttribute"), specificationAttribute.Name);
+                _customerActivityService.InsertActivity("EditSpecAttribute", specificationAttribute.Id,
+                    _localizationService.GetResource("ActivityLog.EditSpecAttribute"), specificationAttribute.Name);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Updated"));
 
@@ -221,7 +223,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _specificationAttributeService.DeleteSpecificationAttribute(specificationAttribute);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteSpecAttribute", _localizationService.GetResource("ActivityLog.DeleteSpecAttribute"), specificationAttribute.Name);
+            _customerActivityService.InsertActivity("DeleteSpecAttribute", specificationAttribute.Id,
+                _localizationService.GetResource("ActivityLog.DeleteSpecAttribute"), specificationAttribute.Name);
 
             SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Deleted"));
             return RedirectToAction("List");

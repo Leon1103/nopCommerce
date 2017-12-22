@@ -1562,7 +1562,8 @@ namespace Nop.Services.Orders
 
                     //reset checkout data
                     _customerService.ResetCheckoutData(details.Customer, processPaymentRequest.StoreId, clearCouponCodes: true, clearCheckoutAttributes: true);
-                    _customerActivityService.InsertActivity("PublicStore.PlaceOrder", _localizationService.GetResource("ActivityLog.PublicStore.PlaceOrder"), order.Id);
+                    _customerActivityService.InsertActivity("PublicStore.PlaceOrder", order.Id,
+                        _localizationService.GetResource("ActivityLog.PublicStore.PlaceOrder"), order.Id);
 
                     //check order status
                     CheckOrderStatus(order);

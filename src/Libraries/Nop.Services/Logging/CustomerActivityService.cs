@@ -205,12 +205,14 @@ namespace Nop.Services.Logging
         /// Inserts an activity log item
         /// </summary>
         /// <param name="systemKeyword">The system keyword</param>
+        /// <param name="entityId">Related entity identifier</param>
         /// <param name="comment">The activity comment</param>
         /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
         /// <returns>Activity log item</returns>
-        public virtual ActivityLog InsertActivity(string systemKeyword, string comment, params object[] commentParams)
+        public virtual ActivityLog InsertActivity(string systemKeyword, 
+            int? entityId = null, string comment = null, params object[] commentParams)
         {
-            return InsertActivity(_workContext.CurrentCustomer, systemKeyword, comment, commentParams);
+            return InsertActivity(_workContext.CurrentCustomer, systemKeyword, entityId, comment, commentParams);
         }
 
         /// <summary>
@@ -218,10 +220,12 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="customer">The customer</param>
         /// <param name="systemKeyword">The system keyword</param>
+        /// <param name="entityId">Related entity identifier</param>
         /// <param name="comment">The activity comment</param>
         /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
         /// <returns>Activity log item</returns>
-        public virtual ActivityLog InsertActivity(Customer customer, string systemKeyword, string comment, params object[] commentParams)
+        public virtual ActivityLog InsertActivity(Customer customer, string systemKeyword, 
+            int? entityId = null, string comment = null, params object[] commentParams)
         {
             if (customer == null)
                 return null;
@@ -235,18 +239,19 @@ namespace Nop.Services.Logging
             comment = string.Format(comment, commentParams);
             comment = CommonHelper.EnsureMaximumLength(comment, 4000);
 
-            var activity = new ActivityLog
+            var logItem = new ActivityLog
             {
                 ActivityLogTypeId = activityType.Id,
+                EntityId = entityId,
                 Customer = customer,
                 Comment = comment,
                 CreatedOnUtc = DateTime.UtcNow,
                 IpAddress = _webHelper.GetCurrentIpAddress()
             };
 
-            _activityLogRepository.Insert(activity);
+            _activityLogRepository.Insert(logItem);
 
-            return activity;
+            return logItem;
         }
         
         /// <summary>
@@ -264,34 +269,46 @@ namespace Nop.Services.Logging
         /// <summary>
         /// Gets all activity log items
         /// </summary>
-        /// <param name="createdOnFrom">Log item creation from; null to load all activities</param>
-        /// <param name="createdOnTo">Log item creation to; null to load all activities</param>
-        /// <param name="customerId">Customer identifier; null to load all activities</param>
-        /// <param name="activityLogTypeId">Activity log type identifier</param>
+        /// <param name="createdOnFrom">Log item creation from; pass null to load all records</param>
+        /// <param name="createdOnTo">Log item creation to; pass null to load all records</param>
+        /// <param name="customerId">Customer identifier; pass null to load all records</param>
+        /// <param name="activityLogTypeId">Activity log type identifier; pass null to load all records</param>
+        /// <param name="entityId">Related entity identifier; pass null to load all records</param>
+        /// <param name="ipAddress">IP address; pass null or empty to load all records</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <param name="ipAddress">IP address; null or empty to load all activities</param>
         /// <returns>Activity log items</returns>
-        public virtual IPagedList<ActivityLog> GetAllActivities(DateTime? createdOnFrom = null,
-            DateTime? createdOnTo = null, int? customerId = null, int activityLogTypeId = 0,
-            int pageIndex = 0, int pageSize = int.MaxValue, string ipAddress = null)
+        public virtual IPagedList<ActivityLog> GetAllActivities(DateTime? createdOnFrom = null, DateTime? createdOnTo = null, 
+            int? customerId = null, int? activityLogTypeId = null, int? entityId = null, string ipAddress = null,
+            int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _activityLogRepository.Table;
+
+            //filter by IP
             if(!string.IsNullOrEmpty(ipAddress))
-                query = query.Where(al => al.IpAddress.Contains(ipAddress));
+                query = query.Where(logItem => logItem.IpAddress.Contains(ipAddress));
+
+            //filter by creation date
             if (createdOnFrom.HasValue)
-                query = query.Where(al => createdOnFrom.Value <= al.CreatedOnUtc);
+                query = query.Where(logItem => createdOnFrom.Value <= logItem.CreatedOnUtc);
             if (createdOnTo.HasValue)
-                query = query.Where(al => createdOnTo.Value >= al.CreatedOnUtc);
-            if (activityLogTypeId > 0)
-                query = query.Where(al => activityLogTypeId == al.ActivityLogTypeId);
-            if (customerId.HasValue)
-                query = query.Where(al => customerId.Value == al.CustomerId);
+                query = query.Where(logItem => createdOnTo.Value >= logItem.CreatedOnUtc);
 
-            query = query.OrderByDescending(al => al.CreatedOnUtc);
+            //filter by log type
+            if (activityLogTypeId.HasValue && activityLogTypeId.Value > 0)
+                query = query.Where(logItem => activityLogTypeId == logItem.ActivityLogTypeId);
 
-            var activityLog = new PagedList<ActivityLog>(query, pageIndex, pageSize);
-            return activityLog;
+            //filter by customer
+            if (customerId.HasValue && customerId.Value > 0)
+                query = query.Where(logItem => customerId.Value == logItem.CustomerId);
+
+            //filter by entity
+            if (entityId.HasValue && entityId.Value > 0)
+                query = query.Where(logItem => entityId.Value == logItem.EntityId);
+
+            query = query.OrderByDescending(logItem => logItem.CreatedOnUtc).ThenBy(logItem => logItem.Id);
+
+            return new PagedList<ActivityLog>(query, pageIndex, pageSize);
         }
         
         /// <summary>

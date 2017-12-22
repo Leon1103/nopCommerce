@@ -202,7 +202,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _countryService.InsertCountry(country);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewCountry", _localizationService.GetResource("ActivityLog.AddNewCountry"), country.Id);
+                _customerActivityService.InsertActivity("AddNewCountry", country.Id,
+                    _localizationService.GetResource("ActivityLog.AddNewCountry"), country.Id);
 
                 //locales
                 UpdateLocales(country, model);
@@ -266,7 +267,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _countryService.UpdateCountry(country);
 
                 //activity log
-                _customerActivityService.InsertActivity("EditCountry", _localizationService.GetResource("ActivityLog.EditCountry"), country.Id);
+                _customerActivityService.InsertActivity("EditCountry", country.Id,
+                    _localizationService.GetResource("ActivityLog.EditCountry"), country.Id);
 
                 //locales
                 UpdateLocales(country, model);
@@ -311,7 +313,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _countryService.DeleteCountry(country);
 
                 //activity log
-                _customerActivityService.InsertActivity("DeleteCountry", _localizationService.GetResource("ActivityLog.DeleteCountry"), country.Id);
+                _customerActivityService.InsertActivity("DeleteCountry", country.Id,
+                    _localizationService.GetResource("ActivityLog.DeleteCountry"), country.Id);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Configuration.Countries.Deleted"));
                 return RedirectToAction("List");
@@ -415,7 +418,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _stateProvinceService.InsertStateProvince(sp);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewStateProvince", _localizationService.GetResource("ActivityLog.AddNewStateProvince"), sp.Id);
+                _customerActivityService.InsertActivity("AddNewStateProvince", sp.Id,
+                    _localizationService.GetResource("ActivityLog.AddNewStateProvince"), sp.Id);
 
                 UpdateLocales(sp, model);
 
@@ -465,7 +469,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _stateProvinceService.UpdateStateProvince(sp);
 
                 //activity log
-                _customerActivityService.InsertActivity("EditStateProvince", _localizationService.GetResource("ActivityLog.EditStateProvince"), sp.Id);
+                _customerActivityService.InsertActivity("EditStateProvince", sp.Id,
+                    _localizationService.GetResource("ActivityLog.EditStateProvince"), sp.Id);
 
                 UpdateLocales(sp, model);
 
@@ -496,7 +501,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _stateProvinceService.DeleteStateProvince(state);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteStateProvince", _localizationService.GetResource("ActivityLog.DeleteStateProvince"), state.Id);
+            _customerActivityService.InsertActivity("DeleteStateProvince", state.Id,
+                _localizationService.GetResource("ActivityLog.DeleteStateProvince"), state.Id);
 
             return new NullJsonResult();
         }

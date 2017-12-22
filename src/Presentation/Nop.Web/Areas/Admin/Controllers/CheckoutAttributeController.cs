@@ -327,7 +327,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 SaveStoreMappings(checkoutAttribute, model);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewCheckoutAttribute", _localizationService.GetResource("ActivityLog.AddNewCheckoutAttribute"), checkoutAttribute.Name);
+                _customerActivityService.InsertActivity("AddNewCheckoutAttribute", checkoutAttribute.Id,
+                    _localizationService.GetResource("ActivityLog.AddNewCheckoutAttribute"), checkoutAttribute.Name);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Added"));
 
@@ -400,7 +401,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 SaveStoreMappings(checkoutAttribute, model);
 
                 //activity log
-                _customerActivityService.InsertActivity("EditCheckoutAttribute", _localizationService.GetResource("ActivityLog.EditCheckoutAttribute"), checkoutAttribute.Name);
+                _customerActivityService.InsertActivity("EditCheckoutAttribute", checkoutAttribute.Id,
+                    _localizationService.GetResource("ActivityLog.EditCheckoutAttribute"), checkoutAttribute.Name);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Updated"));
                 if (continueEditing)
@@ -434,7 +436,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _checkoutAttributeService.DeleteCheckoutAttribute(checkoutAttribute);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteCheckoutAttribute", _localizationService.GetResource("ActivityLog.DeleteCheckoutAttribute"), checkoutAttribute.Name);
+            _customerActivityService.InsertActivity("DeleteCheckoutAttribute", checkoutAttribute.Id,
+                _localizationService.GetResource("ActivityLog.DeleteCheckoutAttribute"), checkoutAttribute.Name);
 
             SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Deleted"));
             return RedirectToAction("List");

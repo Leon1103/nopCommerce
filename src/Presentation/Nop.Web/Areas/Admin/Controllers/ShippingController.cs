@@ -726,7 +726,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _shippingService.InsertWarehouse(warehouse);
                 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewWarehouse", _localizationService.GetResource("ActivityLog.AddNewWarehouse"), warehouse.Id);
+                _customerActivityService.InsertActivity("AddNewWarehouse", warehouse.Id,
+                    _localizationService.GetResource("ActivityLog.AddNewWarehouse"), warehouse.Id);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Warehouses.Added"));
                 return continueEditing ? RedirectToAction("EditWarehouse", new { id = warehouse.Id }) : RedirectToAction("Warehouses");
@@ -827,7 +828,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _shippingService.UpdateWarehouse(warehouse);
 
                 //activity log
-                _customerActivityService.InsertActivity("EditWarehouse", _localizationService.GetResource("ActivityLog.EditWarehouse"), warehouse.Id);
+                _customerActivityService.InsertActivity("EditWarehouse", warehouse.Id,
+                    _localizationService.GetResource("ActivityLog.EditWarehouse"), warehouse.Id);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Warehouses.Updated"));
                 return continueEditing ? RedirectToAction("EditWarehouse", warehouse.Id) : RedirectToAction("Warehouses");
@@ -866,7 +868,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _shippingService.DeleteWarehouse(warehouse);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteWarehouse", _localizationService.GetResource("ActivityLog.DeleteWarehouse"), warehouse.Id);
+            _customerActivityService.InsertActivity("DeleteWarehouse", warehouse.Id,
+                _localizationService.GetResource("ActivityLog.DeleteWarehouse"), warehouse.Id);
 
             SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.warehouses.Deleted"));
             return RedirectToAction("Warehouses");

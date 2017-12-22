@@ -273,7 +273,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _discountService.InsertDiscount(discount);
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewDiscount", _localizationService.GetResource("ActivityLog.AddNewDiscount"), discount.Name);
+                _customerActivityService.InsertActivity("AddNewDiscount", discount.Id,
+                    _localizationService.GetResource("ActivityLog.AddNewDiscount"), discount.Name);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Promotions.Discounts.Added"));
 
@@ -353,7 +354,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
 
                 //activity log
-                _customerActivityService.InsertActivity("EditDiscount", _localizationService.GetResource("ActivityLog.EditDiscount"), discount.Name);
+                _customerActivityService.InsertActivity("EditDiscount", discount.Id,
+                    _localizationService.GetResource("ActivityLog.EditDiscount"), discount.Name);
 
                 SuccessNotification(_localizationService.GetResource("Admin.Promotions.Discounts.Updated"));
 
@@ -394,7 +396,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _productService.UpdateHasDiscountsApplied(p);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteDiscount", _localizationService.GetResource("ActivityLog.DeleteDiscount"), discount.Name);
+            _customerActivityService.InsertActivity("DeleteDiscount", discount.Id,
+                _localizationService.GetResource("ActivityLog.DeleteDiscount"), discount.Name);
 
             SuccessNotification(_localizationService.GetResource("Admin.Promotions.Discounts.Deleted"));
             return RedirectToAction("List");

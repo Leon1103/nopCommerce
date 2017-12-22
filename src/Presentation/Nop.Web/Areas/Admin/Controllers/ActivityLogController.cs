@@ -62,7 +62,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return AccessDeniedView();
 
             //activity log
-            _customerActivityService.InsertActivity("EditActivityLogTypes", _localizationService.GetResource("ActivityLog.EditActivityLogTypes"));
+            _customerActivityService.InsertActivity("EditActivityLogTypes", 
+                comment: _localizationService.GetResource("ActivityLog.EditActivityLogTypes"));
 
             var formKey = "checkbox_activity_types";
             var checkedActivityTypes = !StringValues.IsNullOrEmpty(form[formKey]) ?
@@ -108,29 +109,34 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ListLogs(DataSourceRequest command, ActivityLogSearchModel model)
+        public virtual IActionResult ListLogs(DataSourceRequest command, ActivityLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedKendoGridJson();
 
-            var startDateValue = (model.CreatedOnFrom == null) ? null
-                : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.CreatedOnFrom.Value, _dateTimeHelper.CurrentTimeZone);
+            var startDateValue = searchModel.CreatedOnFrom == null ? null
+                : (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.CreatedOnFrom.Value, _dateTimeHelper.CurrentTimeZone);
 
-            var endDateValue = (model.CreatedOnTo == null) ? null
-                            : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.CreatedOnTo.Value, _dateTimeHelper.CurrentTimeZone).AddDays(1);
+            var endDateValue = searchModel.CreatedOnTo == null ? null 
+                : (DateTime?)_dateTimeHelper.ConvertToUtcTime(searchModel.CreatedOnTo.Value, _dateTimeHelper.CurrentTimeZone).AddDays(1);
 
-            var activityLog = _customerActivityService.GetAllActivities(startDateValue, endDateValue,null, model.ActivityLogTypeId, command.Page - 1, command.PageSize, model.IpAddress);
+            var activityLog = _customerActivityService.GetAllActivities(startDateValue, endDateValue,
+                activityLogTypeId: searchModel.ActivityLogTypeId, ipAddress: searchModel.IpAddress,
+                pageIndex: command.Page - 1, pageSize: command.PageSize);
+
             var gridModel = new DataSourceResult
             {
-                Data = activityLog.Select(x =>
+                Data = activityLog.Select(logItem =>
                 {
-                    var m = x.ToModel();
-                    m.CreatedOn = _dateTimeHelper.ConvertToUserTime(x.CreatedOnUtc, DateTimeKind.Utc);
-                    return m;
+                    var model = logItem.ToModel();
+                    model.CreatedOn = _dateTimeHelper.ConvertToUserTime(logItem.CreatedOnUtc, DateTimeKind.Utc);
+
+                    return model;
                     
                 }),
                 Total = activityLog.TotalCount
             };
+
             return Json(gridModel);
         }
 
@@ -139,15 +145,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
 
-            var activityLog = _customerActivityService.GetActivityById(id);
-            if (activityLog == null)
-            {
-                throw new ArgumentException("No activity log found with the specified id");
-            }
-            _customerActivityService.DeleteActivity(activityLog);
+            var logItem = _customerActivityService.GetActivityById(id)
+                ?? throw new ArgumentException("No activity log found with the specified id");
+
+            _customerActivityService.DeleteActivity(logItem);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteActivityLog", _localizationService.GetResource("ActivityLog.DeleteActivityLog"));
+            _customerActivityService.InsertActivity("DeleteActivityLog", logItem.Id,
+                _localizationService.GetResource("ActivityLog.DeleteActivityLog"));
 
             return new NullJsonResult();
         }
@@ -160,7 +165,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _customerActivityService.ClearAllActivities();
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteActivityLog", _localizationService.GetResource("ActivityLog.DeleteActivityLog"));
+            _customerActivityService.InsertActivity("DeleteActivityLog",
+                comment: _localizationService.GetResource("ActivityLog.DeleteActivityLog"));
 
             return RedirectToAction("ListLogs");
         }

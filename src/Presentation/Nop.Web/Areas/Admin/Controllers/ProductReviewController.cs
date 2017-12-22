@@ -228,7 +228,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _productService.UpdateProduct(productReview.Product);
 
                 //activity log
-                _customerActivityService.InsertActivity("EditProductReview", _localizationService.GetResource("ActivityLog.EditProductReview"), productReview.Id);
+                _customerActivityService.InsertActivity("EditProductReview", productReview.Id,
+                    _localizationService.GetResource("ActivityLog.EditProductReview"), productReview.Id);
 
                 //vendor can edit "Reply text" only
                 if (!isLoggedInAsVendor)
@@ -273,7 +274,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _productService.DeleteProductReview(productReview);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteProductReview", _localizationService.GetResource("ActivityLog.DeleteProductReview"), productReview.Id);
+            _customerActivityService.InsertActivity("DeleteProductReview", productReview.Id,
+                _localizationService.GetResource("ActivityLog.DeleteProductReview"), productReview.Id);
 
             //update product totals
             _productService.UpdateProductReviewTotals(product);

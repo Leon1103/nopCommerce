@@ -293,7 +293,8 @@ namespace Nop.Web.Controllers
                             _eventPublisher.Publish(new CustomerLoggedinEvent(customer));
 
                             //activity log
-                            _customerActivityService.InsertActivity(customer, "PublicStore.Login", _localizationService.GetResource("ActivityLog.PublicStore.Login"));
+                            _customerActivityService.InsertActivity(customer, "PublicStore.Login", customer.Id,
+                                _localizationService.GetResource("ActivityLog.PublicStore.Login"));
 
                             if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
                                 return RedirectToRoute("HomePage");
@@ -336,26 +337,26 @@ namespace Nop.Web.Controllers
             if (_workContext.OriginalCustomerIfImpersonated != null)
             {
                 //activity log
-                _customerActivityService.InsertActivity(_workContext.OriginalCustomerIfImpersonated,
-                    "Impersonation.Finished",
+                _customerActivityService.InsertActivity(_workContext.OriginalCustomerIfImpersonated, 
+                    "Impersonation.Finished", _workContext.CurrentCustomer.Id,
                     _localizationService.GetResource("ActivityLog.Impersonation.Finished.StoreOwner"),
                     _workContext.CurrentCustomer.Email, _workContext.CurrentCustomer.Id);
-                _customerActivityService.InsertActivity("Impersonation.Finished",
+
+                _customerActivityService.InsertActivity("Impersonation.Finished", _workContext.OriginalCustomerIfImpersonated.Id,
                     _localizationService.GetResource("ActivityLog.Impersonation.Finished.Customer"),
                     _workContext.OriginalCustomerIfImpersonated.Email, _workContext.OriginalCustomerIfImpersonated.Id);
 
                 //logout impersonated customer
-                _genericAttributeService.SaveAttribute<int?>(_workContext.OriginalCustomerIfImpersonated,
-                    SystemCustomerAttributeNames.ImpersonatedCustomerId, null);
+                _genericAttributeService
+                    .SaveAttribute<int?>(_workContext.OriginalCustomerIfImpersonated, SystemCustomerAttributeNames.ImpersonatedCustomerId, null);
 
                 //redirect back to customer details page (admin area)
-                return this.RedirectToAction("Edit", "Customer",
-                    new { id = _workContext.CurrentCustomer.Id, area = AreaNames.Admin });
-
+                return this.RedirectToAction("Edit", "Customer", new { id = _workContext.CurrentCustomer.Id, area = AreaNames.Admin });
             }
 
             //activity log
-            _customerActivityService.InsertActivity("PublicStore.Logout", _localizationService.GetResource("ActivityLog.PublicStore.Logout"));
+            _customerActivityService.InsertActivity("PublicStore.Logout", _workContext.CurrentCustomer.Id,
+                _localizationService.GetResource("ActivityLog.PublicStore.Logout"));
 
             //standard logout 
             _authenticationService.SignOut();

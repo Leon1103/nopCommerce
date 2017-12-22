@@ -41,25 +41,29 @@ namespace Nop.Services.Logging
         /// <param name="activityLogTypeId">Activity log type identifier</param>
         /// <returns>Activity log type item</returns>
         ActivityLogType GetActivityTypeById(int activityLogTypeId);
-        
+
         /// <summary>
         /// Inserts an activity log item
         /// </summary>
         /// <param name="systemKeyword">The system keyword</param>
+        /// <param name="entityId">Related entity identifier</param>
         /// <param name="comment">The activity comment</param>
         /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
         /// <returns>Activity log item</returns>
-        ActivityLog InsertActivity(string systemKeyword, string comment, params object[] commentParams);
+        ActivityLog InsertActivity(string systemKeyword,
+            int? entityId = null, string comment = null, params object[] commentParams);
 
         /// <summary>
         /// Inserts an activity log item
         /// </summary>
         /// <param name="customer">The customer</param>
         /// <param name="systemKeyword">The system keyword</param>
+        /// <param name="entityId">Related entity identifier</param>
         /// <param name="comment">The activity comment</param>
         /// <param name="commentParams">The activity comment parameters for string.Format() function.</param>
         /// <returns>Activity log item</returns>
-        ActivityLog InsertActivity(Customer customer, string systemKeyword, string comment,  params object[] commentParams);
+        ActivityLog InsertActivity(Customer customer, string systemKeyword,
+            int? entityId = null, string comment = null, params object[] commentParams);
 
         /// <summary>
         /// Deletes an activity log item
@@ -70,17 +74,18 @@ namespace Nop.Services.Logging
         /// <summary>
         /// Gets all activity log items
         /// </summary>
-        /// <param name="createdOnFrom">Log item creation from; null to load all customers</param>
-        /// <param name="createdOnTo">Log item creation to; null to load all customers</param>
-        /// <param name="customerId">Customer identifier; null to load all customers</param>
-        /// <param name="activityLogTypeId">Activity log type identifier</param>
+        /// <param name="createdOnFrom">Log item creation from; pass null to load all records</param>
+        /// <param name="createdOnTo">Log item creation to; pass null to load all records</param>
+        /// <param name="customerId">Customer identifier; pass null to load all records</param>
+        /// <param name="activityLogTypeId">Activity log type identifier; pass null to load all records</param>
+        /// <param name="entityId">Related entity identifier; pass null to load all records</param>
+        /// <param name="ipAddress">IP address; pass null or empty to load all records</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <param name="ipAddress">IP address; null or empty to load all customers</param>
         /// <returns>Activity log items</returns>
-        IPagedList<ActivityLog> GetAllActivities(DateTime? createdOnFrom = null,
-            DateTime? createdOnTo = null, int? customerId = null, int activityLogTypeId = 0,
-            int pageIndex = 0, int pageSize = int.MaxValue, string ipAddress = null);
+        IPagedList<ActivityLog> GetAllActivities(DateTime? createdOnFrom = null, DateTime? createdOnTo = null,
+            int? customerId = null, int? activityLogTypeId = null, int? entityId = null, string ipAddress = null,
+            int pageIndex = 0, int pageSize = int.MaxValue);
         
         /// <summary>
         /// Gets an activity log item

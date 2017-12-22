@@ -116,7 +116,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             _scheduleTaskService.UpdateTask(scheduleTask);
 
             //activity log
-            _customerActivityService.InsertActivity("EditTask", _localizationService.GetResource("ActivityLog.EditTask"), scheduleTask.Id);
+            _customerActivityService.InsertActivity("EditTask", scheduleTask.Id,
+                _localizationService.GetResource("ActivityLog.EditTask"), scheduleTask.Id);
 
             return new NullJsonResult();
         }
